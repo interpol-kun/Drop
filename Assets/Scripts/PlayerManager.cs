@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    //что это за говно?
     #region Singleton
     public static PlayerManager instance;
 

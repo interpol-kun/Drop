@@ -24,19 +24,6 @@ public class DropController : MonoBehaviour
         x = Input.GetAxis("Horizontal");
         direction = new Vector3(x, 0, 0);
         Move(direction);
-        
-        //GetKey используется только на устройствах с клавиатурой. Для унифицированного ввода используй Axis в Unity Input.
-        //Изменение position у transform и rigidbody равна телепортации объекта. Так лучше не делать за редкими исключениями.
-
-        //if (Input.GetKey(KeyCode.A))
-        //{
-        //    transform.position += Vector3.left * speed * Time.deltaTime;
-
-        //}
-        //else if (Input.GetKey(KeyCode.D))
-        //{
-        //    transform.position += Vector3.right * speed * Time.deltaTime;
-        //}
 
     }
 
