@@ -23,8 +23,9 @@ public class DropController : MonoBehaviour
     void Update()
     {
         touch = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+        //touch = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         x = touch.x;
-        Debug.Log(touch);
+        //Debug.Log(touch);
         //x = Input.GetAxis("Horizontal");
         direction = new Vector3(x, 0, 0);
         Move(direction);
