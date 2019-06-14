@@ -12,8 +12,8 @@ public class Tile : MonoBehaviour
 
     public void Move(float speed)
     {
-        transform.Translate(Vector3.back * speed * Time.deltaTime);
-        if (transform.position.z <= -10f) {
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        if (transform.position.z >= 10f) {
             dirty = true;
         }
     }

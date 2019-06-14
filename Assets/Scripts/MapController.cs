@@ -18,6 +18,8 @@ public class MapController : MonoBehaviour
     private List<Tile> nearTiles = new List<Tile>();
     void Start()
     {
+        Application.targetFrameRate = 50;
+
         nearTiles.Add(transform.GetChild(0).gameObject.GetComponent<Tile>());
         root = nearTiles[0].gameObject.GetComponent<MeshRenderer>();
         size = root.bounds.size.z;
@@ -53,7 +55,7 @@ public class MapController : MonoBehaviour
             DeleteFirstTile();
         }
         nearTiles.Add((Instantiate(Tiles[Random.Range(0, 2)], new Vector3(nearTiles[0].transform.position.x,
-            nearTiles[nearTiles.Count-1].transform.position.y, nearTiles[nearTiles.Count-1].transform.position.z + size),
+            nearTiles[nearTiles.Count-1].transform.position.y, nearTiles[nearTiles.Count-1].transform.position.z - size),
             nearTiles[nearTiles.Count-1].transform.rotation, transform)).GetComponent<Tile>());
     }
 
