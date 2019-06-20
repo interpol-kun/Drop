@@ -1,0 +1,6 @@
+{
+    "editor.formatOnType": true,
+    "editor.formatOnPaste": true,
+    "csharpfixformat.style.braces.onSameLine": false,
+    "csharpfixformat.style.braces.allowInlines": false
+}

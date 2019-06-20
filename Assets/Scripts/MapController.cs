@@ -23,7 +23,6 @@ public class MapController : MonoBehaviour
         nearTiles.Add(transform.GetChild(0).gameObject.GetComponent<Tile>());
         root = nearTiles[0].gameObject.GetComponent<MeshRenderer>();
         size = root.bounds.size.z;
-        Debug.Log(size);
         CreateNextTile();
     }
 
