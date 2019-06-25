@@ -3,7 +3,13 @@
 [RequireComponent(typeof(Rigidbody))]
 public class DropController : MonoBehaviour
 {
-    public float speed = 15.0f;
+
+    public delegate void Death();
+    public static event Death OnDeath;
+    public float speed;
+
+    [SerializeField]
+    private float maxSpeed = 10f;
 
     private Rigidbody rb = null;
     private float x;
@@ -22,11 +28,23 @@ public class DropController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        touch = mainCamera.ScreenToWorldPoint(Input.GetTouch(0).position);
-        //touch = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //touch = mainCamera.ScreenToWorldPoint(Input.GetTouch(0).position); //Для сенсорных устройств
+        touch = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Для эдитора        
         x = touch.x;
         //Debug.Log(touch);
         //x = Input.GetAxis("Horizontal");
+
+        if (speed <= 0)
+        {
+            OnDeath?.Invoke();
+            speed = maxSpeed;
+            Debug.Log("Death");
+        }
+        else if (speed < maxSpeed)
+        {
+            speed += 0.01f;
+        }
+
         direction = new Vector3(x, 0, 0);
         Move(direction);
     }
@@ -38,6 +56,14 @@ public class DropController : MonoBehaviour
         //rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
         //rb.MovePosition(Vector3.Lerp(transform.position, direction, speed*Time.deltaTime));
         rb.MovePosition(Vector3.MoveTowards(transform.position, direction, speed * Time.deltaTime));
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Dirt")
+        {
+            speed = Mathf.Clamp(speed -= 0.2f, 0, maxSpeed);
+        }
     }
 
     //void OnGUI()

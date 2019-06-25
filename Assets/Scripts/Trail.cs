@@ -5,12 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class Trail : MonoBehaviour
 {
-    public float lifetime = 5f; 
+    public float lifetime = 5f;
 
     public float minimumVertexDistance = 0.1f; //minimum distance moved before a new point is solidified.
 
     public Vector3 velocity; //direction the points are moving
 
+    private DropController drop;
     LineRenderer line;
     List<Vector3> points;
     Queue<float> spawnTimes = new Queue<float>(); //list of spawn times, to simulate lifetime. Back of the queue is vertex 1, front of the queue is the end of the trail.
@@ -22,6 +23,8 @@ public class Trail : MonoBehaviour
         line.useWorldSpace = true;
         points = new List<Vector3>() { transform.position }; //indices 1 - end are solidified points, index 0 is always transform.position
         line.SetPositions(points.ToArray());
+
+        drop = GetComponent<DropController>();
     }
 
     void AddPoint(Vector3 position)
@@ -39,7 +42,7 @@ public class Trail : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        velocity = new Vector3(0, 0, -drop.speed);
         //cull based on lifetime
         while (spawnTimes.Count > 0 && spawnTimes.Peek() + lifetime < Time.time)
         {
