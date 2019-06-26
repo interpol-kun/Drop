@@ -15,6 +15,7 @@ public class CameraFollow : MonoBehaviour
 
     private void Start()
     {
+        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         transform.Rotate(new Vector3(90, 0, 0));
     }
     void LateUpdate()
