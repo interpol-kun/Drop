@@ -8,9 +8,11 @@ public class MapController : MonoBehaviour
     public GameObject[] Tiles;
     public int length;
 
-    public float speed = 1;
+    private DropController drop;
+    private float speed = 1;
 
     private MeshRenderer root;
+    private Vector3 rootPosition;
 
     private float size;
 
@@ -19,44 +21,83 @@ public class MapController : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 50;
-
-        nearTiles.Add(transform.GetChild(0).gameObject.GetComponent<Tile>());
-        root = nearTiles[0].gameObject.GetComponent<MeshRenderer>();
-        size = root.bounds.size.z;
-        Debug.Log(size);
-        CreateNextTile();
+        DropController.OnDeath += ReloadMap;
+        StartMap();
     }
 
+    void StartMap()
+    {
+        CreateRootTile();
+
+        if (drop == null)
+        {
+            drop = GameObject.FindGameObjectWithTag("Player").GetComponent<DropController>();
+        }
+        speed = drop.speed;
+        drop.transform.position = new Vector3(0, 0, 0);
+
+        //Debug.Break();
+    }
+
+    void ReloadMap()
+    {
+        drop.transform.position = Vector3.zero;
+
+        for (int i = nearTiles.Count - 1; i >= 0; i--)
+        {
+            GameObject.Destroy(nearTiles[i].gameObject);
+            nearTiles.RemoveAt(i);
+        }
+
+        StartMap();
+    }
     // Update is called once per frame
     void Update()
     {
-        foreach(var t in nearTiles)
+        if (nearTiles.Count > 1)
         {
-            if (t.dirty)
+            speed = drop.speed;
+
+            foreach (var t in nearTiles)
             {
-                DeleteFirstTile();
-                break;
+                if (t.dirty)
+                {
+                    DeleteFirstTile();
+                    break;
+                }
+                else
+                {
+                    t.Move(speed);
+                }
             }
-            else
+            if (nearTiles.Count < 3)
             {
-                t.Move(speed);
+                CreateNextTile();
             }
-        }
-        if(nearTiles.Count < 3)
-        {
-            CreateNextTile();
         }
     }
 
     private void CreateNextTile()
     {
-        if(nearTiles.Count >= 3)
+        if (nearTiles.Count >= 3)
         {
             DeleteFirstTile();
         }
-        nearTiles.Add((Instantiate(Tiles[Random.Range(0, 2)], new Vector3(nearTiles[0].transform.position.x,
-            nearTiles[nearTiles.Count-1].transform.position.y, nearTiles[nearTiles.Count-1].transform.position.z - size),
-            nearTiles[nearTiles.Count-1].transform.rotation, transform)).GetComponent<Tile>());
+        //Упростил, но можно вернуть считывание позиций для новых объектов по всем осям, а не только по Z, если в будущем будет нужна такой функционал
+        nearTiles.Add((Instantiate(Tiles[Random.Range(0, 2)], new Vector3(rootPosition.x,
+            rootPosition.y, nearTiles[nearTiles.Count - 1].transform.position.z - size),
+            nearTiles[nearTiles.Count - 1].transform.rotation, transform)).GetComponent<Tile>());
+    }
+
+    private void CreateRootTile()
+    {
+        nearTiles.Add((Instantiate(Tiles[Random.Range(0, 2)], Vector3.zero, transform.rotation, transform)).GetComponent<Tile>());
+
+        root = nearTiles[0].gameObject.GetComponent<MeshRenderer>();
+        rootPosition = root.transform.position;
+        size = root.bounds.size.z;
+
+        CreateNextTile();
     }
 
     private void DeleteFirstTile()
