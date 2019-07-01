@@ -28,8 +28,8 @@ public class DropController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //touch = mainCamera.ScreenToWorldPoint(Input.GetTouch(0).position); //Для сенсорных устройств
-        touch = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Для эдитора        
+        touch = mainCamera.ScreenToWorldPoint(Input.GetTouch(0).position); //Для сенсорных устройств
+        //touch = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Для эдитора        
         x = touch.x;
         //Debug.Log(touch);
         //x = Input.GetAxis("Horizontal");
